@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stripe Checkout</title>
+    <style>
+        *{
+            margin: 0%;
+            padding: 0%;
+        }
+        #checkout-button{
+            padding: 13px 20px;
+            cursor: pointer;
+            margin: 50px;
+            color: white;
+            border-radius: 25px;
+            border: 3px solid rgb(70, 70, 70);
+            background-color: rgb(214, 69, 98);
+            font-size: 16px;
+        }
+        .nav{
+            width: 100vw;
+            padding: 20px;
+            color: white;
+            background-color: #000;
+            text-align: center;
+            font-size: 20px;
+        }
+        .main{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <!-- Button to start the checkout process -->
+    <div class="main">
+        <div class="nav"><span>Payemnt Systems</span></div>
+        <button id="checkout-button">Checkout</button>
+    </div>
+
+    <!-- Include Stripe.js -->
+    <script src="https://js.stripe.com/v3/"></script>
+
+    <script>
+        const stripe = Stripe('pk_test_51QI7KACIEPPiVuoMvRzvpob8SYpLse3Rsro4w2XADTAqPycbcJJreif4aQuIfkBDxly9PGtPqmByYRfH1kMx2OMQ008r15oZ34');  // Replace with your actual Stripe public key
+
+        // When the user clicks the checkout button
+        document.getElementById('checkout-button').addEventListener('click', async () => {
+            // Call your backend to create a checkout session
+          // Update the URL to match your backend's local server
+const response = await fetch('http://localhost:5000/create-checkout-session', {
+    method: 'POST',
+});
+
+
+            const session = await response.json();
+
+            // Redirect to the Stripe Checkout page
+            if (session.url) {
+                window.location.href = session.url;
+            } else {
+                alert('Error creating checkout session');
+            }
+        });
+    </script>
+</body>
+</html>
